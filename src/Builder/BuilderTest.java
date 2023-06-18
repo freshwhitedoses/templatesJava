@@ -2,82 +2,48 @@ package Builder;
 
 //Используется для создания сложного объекта с использованием простых объектов.
 // Постепенно он создает больший объект от малого и простого объекта. Позволяет изменять внутреннее представление конечного продукта.
+class Person{
+    int id;
+    int age;
+    double salary;
+}
+interface Builder{
+    Builder setId (int id);
+    Builder setAge (int age);
+    Builder setSalary(int salary);
+    Person build();
+}
+class PersonBuilder implements Builder{
+    Person person = new Person();
+    @Override
+    public Builder setId(int id) {
+        person.id=id;
+        return this;
+    }
 
-class Car {
-    public void buildBase() {
-        print("Делаем корпус");
+    @Override
+    public Builder setAge(int age) {
+        person.age=age;
+        return this;
     }
-    public void buildWheels() {
-        print("Ставим колесо");
+
+    @Override
+    public Builder setSalary(int salary) {
+        person.salary=salary;
+        return this;
     }
-    public void buildEngine(Engine engine) {
-        print("Ставим движок: " + engine.getEngineType());
-    }
-    private void print(String msg){
-        System.out.println(msg);
-    }
-}
-interface Engine {
-    String getEngineType();
-}
-class OneEngine implements Engine {
-    public String getEngineType() {
-        return "Первый двигатель";
-    }
-}
-class TwoEngine implements Engine {
-    public String getEngineType() {
-        return "Второй двигатель";
-    }
-}
-abstract class Builder {
-    protected Car car;
-    public abstract Car buildCar();
-}
-class OneBuilderImpl extends Builder {
-    public OneBuilderImpl(){
-        car = new Car();
-    }
-    public Car buildCar() {
-        car.buildBase();
-        car.buildWheels();
-        Engine engine = new OneEngine();
-        car.buildEngine(engine);
-        return car;
-    }
-}
-class TwoBuilderImpl extends Builder {
-    public TwoBuilderImpl(){
-        car = new Car();
-    }
-    public Car buildCar() {
-        car.buildBase();
-        car.buildWheels();
-        Engine engine = new OneEngine();
-        car.buildEngine(engine);
-        car.buildWheels();
-        engine = new TwoEngine();
-        car.buildEngine(engine);
-        return car;
-    }
-}
-class Build {
-    private Builder builder;
-    public Build(int i){
-        if(i == 1) {
-            builder = new OneBuilderImpl();
-        } else if(i == 2) {
-            builder = new TwoBuilderImpl();
-        }
-    }
-    public Car buildCar(){
-        return builder.buildCar();
+
+    @Override
+    public Person build() {
+        return person;
     }
 }
 
 public class BuilderTest {
     public static void main(String[] args) {
-        Build build = new Build(1);
-        build.buildCar();
+        Person person = new PersonBuilder().setAge(12).setId(1).build();
+        System.out.println(person.id);
+        System.out.println(person.salary);
+        System.out.println(person.age);
     }
 }

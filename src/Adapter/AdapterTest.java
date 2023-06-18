@@ -8,7 +8,7 @@ class PBank {
         System.out.println("PBank balance = " + balance);
     }
 }
-class ABank {
+class  ABank {
     private int balance;
     public ABank() { balance = 200; }
     public void getBalance() {
